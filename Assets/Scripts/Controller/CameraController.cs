@@ -13,8 +13,8 @@ public class CameraController : MonoBehaviour
     public float maxZoom = 15f;
 
     private float currentZoom = 10f;
-    public float yawSpeed = 100f;
-    private float currentYaw = 0f;
+    public float yawSpeed = 100f, pitchSpeed = 1f;
+    private float currentYaw = 0f, currentPitch=0f;
 
     private void Update()
     {
@@ -22,6 +22,7 @@ public class CameraController : MonoBehaviour
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         if (Input.GetMouseButton(1)){
             currentYaw += Input.GetAxis("Horizontal") * yawSpeed * Time.deltaTime;
+            currentPitch += Input.GetAxis("Vertical") * yawSpeed * Time.deltaTime;
         }
         
     }
