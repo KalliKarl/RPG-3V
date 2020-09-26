@@ -13,14 +13,18 @@ public class CameraController : MonoBehaviour
     public float maxZoom = 15f;
 
     private float currentZoom = 10f;
-    public float yawSpeed = 100f, pitchSpeed = 1f;
+    public float yawSpeed = 10f, pitchSpeed = 10f;
     private float currentYaw = 0f, currentPitch=0f;
+    float y, x;
 
     private void Update()
     {
         currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
         if (Input.GetMouseButton(1)){
+            y = Input.GetAxis("Horizontal");
+            x = Input.GetAxis("Vertical");
+            Debug.Log(x+" -  -  - "+y);
             currentYaw += Input.GetAxis("Horizontal") * yawSpeed * Time.deltaTime;
             currentPitch += Input.GetAxis("Vertical") * yawSpeed * Time.deltaTime;
         }
@@ -30,7 +34,6 @@ public class CameraController : MonoBehaviour
     {
         transform.position = target.position - offset * currentZoom;
         transform.LookAt(target.position + Vector3.up * pitch);
-        
         transform.RotateAround(target.position, Vector3.up, currentYaw);
     }
   
