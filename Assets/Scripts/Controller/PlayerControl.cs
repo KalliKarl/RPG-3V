@@ -1,6 +1,7 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net.Cache;
 
 public class PlayerControl : MonoBehaviour {
     public Interactable focus;
@@ -19,7 +20,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void Update() {
-
+        
 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
@@ -35,6 +36,7 @@ public class PlayerControl : MonoBehaviour {
 
                 // stop focusing any objects
                 RemoveFocus();
+                
             }
         }
         if (Input.GetMouseButtonDown(1)) {

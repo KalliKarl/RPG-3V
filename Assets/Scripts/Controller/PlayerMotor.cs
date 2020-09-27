@@ -8,6 +8,7 @@ public class PlayerMotor : MonoBehaviour
 {
     Transform target;
     NavMeshAgent agent;
+    public Vector3 point2 = Vector3.zero;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -18,12 +19,30 @@ public class PlayerMotor : MonoBehaviour
         if(target != null)
         {
             agent.SetDestination(target.position);
-            FaceTarget();
+            FaceTarget();            
         }
+        if (point2 != Vector3.zero) {
+            float distonse = Vector3.Distance(agent.transform.position, point2);
+            if (distonse < 1.9) {
+
+                Debug.Log("if STOP" + distonse);
+                gameObject.GetComponent<NavMeshAgent>().isStopped = true;
+                point2 = Vector3.zero;
+
+            }
+            else {
+                //Debug.Log("else Continue " + distonse);
+                gameObject.GetComponent<NavMeshAgent>().isStopped = false;
+            }
+        }
+        
     }
     public void MoveToPoint(Vector3 point)
     {
+        point2 = point;
         agent.SetDestination(point);
+        Debug.Log("MoveToPoint " + point);
+       
     }
     
     public void FollowTarget( Interactable newTarget)
@@ -31,6 +50,7 @@ public class PlayerMotor : MonoBehaviour
         agent.stoppingDistance = newTarget.radius * .8f;
         agent.updateRotation = false;
         target = newTarget.interactionTransform;
+        agent.isStopped = true;
     }
 
     public void StopFollowingTarget()
