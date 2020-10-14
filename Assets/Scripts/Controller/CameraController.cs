@@ -1,25 +1,43 @@
 ﻿using UnityEngine;
 using Cinemachine;
-using UnityEngine.InputSystem;
 [RequireComponent(typeof(CinemachineFreeLook))]
 
 public class CameraController : MonoBehaviour
 {
-    PlayerControls controls;
     Vector2 move;
-  
+    float rsh, rsv;
+    bool inpt;
     private bool _freeLookActive;
     private void Start() {
         CinemachineCore.GetInputAxis = GetInputAxis;
     }
     private void Update()
     {
-        //if(Input.GetAxis(""))
+        
         _freeLookActive = Input.GetMouseButton(1); // 0 = left mouse btn or 1 = right
-        //Input.GetAxis(Jo);
-    }
-    private void LateUpdate()
-    {
+
+        if (Input.GetAxis("RSH") != 0)
+        {
+            if (Input.GetAxis("RSH") >= 0.2 || Input.GetAxis("RSH") <= -0.2)
+                
+                rsh = Input.GetAxis("RSH");
+            
+            _freeLookActive = true;
+            inpt = true;
+        }
+        if (Input.GetAxis("RSV") != 0)
+        {
+            if (Input.GetAxis("RSV") >= 0.2 || Input.GetAxis("RSV") <= -0.2)
+                rsv = Input.GetAxis("RSV");
+
+            _freeLookActive = true;
+            inpt = true;
+        }
+        if (inpt)
+        {
+            Debug.Log("X : " + rsh + "\t Y:" + rsv);
+            inpt = false;
+        }
 
     }
     private float GetInputAxis(string axisName) {
@@ -27,21 +45,8 @@ public class CameraController : MonoBehaviour
         
     }
     private void Awake() {
-        controls = new PlayerControls();
-        //controls.Gameplay.RStick.performed += ctx => move =ctx.ReadValue<Vector2>();
-       // controls.Gameplay.RStick.canceled += ctx => move = Vector2.zero;
     }
 
-    //void RStick() {
-    //    Debug.Log("Rstick");
-    //}
-    //private void OnEnable() {
-    //    controls.Gameplay.Enable();
-    //    Debug.Log("Enable");
-    //}
-    //private void OnDisable() {
-    //    controls.Gameplay.Disable();
-    //}
 
 
 }
