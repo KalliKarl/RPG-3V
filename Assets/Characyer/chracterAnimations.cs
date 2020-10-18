@@ -40,17 +40,17 @@ public class chracterAnimations : MonoBehaviour
 
         if (speedPercent != 0)
         {
-            Debug.Log(speedPercent + "speedpercent");
+            //Debug.Log(speedPercent + "speedpercent");
             animator.SetFloat("speedPercent",speedPercent,0.1f,Time.deltaTime);
         }
         else if (axis <= -0.25 || axis >= 0.25)
         {
-            Debug.Log(axis + "axxxx");
+            //Debug.Log(axis + "axxxx");
             animator.SetFloat("speedPercent", overallSpeedPercent,0.1f,Time.deltaTime);
         }
        else if (axis >= -0.25 || axis <= 0.25)
         {
-            Debug.Log(axis + "else");
+            //Debug.Log(axis + "else");
             animator.SetFloat("speedPercent", 0, 0.1f, Time.deltaTime);
         }
     

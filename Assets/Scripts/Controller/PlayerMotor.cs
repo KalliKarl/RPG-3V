@@ -25,7 +25,7 @@ public class PlayerMotor : MonoBehaviour
             float distonse = Vector3.Distance(agent.transform.position, point2);
             if (distonse < 1.9) {
 
-                Debug.Log("if STOP" + distonse);
+                Debug.Log("STOP" + distonse);
                 gameObject.GetComponent<NavMeshAgent>().isStopped = true;
                 point2 = Vector3.zero;
 
@@ -62,6 +62,6 @@ public class PlayerMotor : MonoBehaviour
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        transform.rotation = lookRotation;//Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime);
     }
 }
