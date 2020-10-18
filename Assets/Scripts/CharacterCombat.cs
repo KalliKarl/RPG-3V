@@ -12,10 +12,10 @@ public class CharacterCombat : MonoBehaviour{
     CharacterStats myStats;
     Image healthSlider;
     public GameObject player;
-    private Animator anim;
+    //private Animator anim;
     private void Start() {
         myStats = GetComponent<CharacterStats>();
-        anim = GameObject.Find("AxeAnimator").GetComponent<Animator>();
+        //anim = GameObject.Find("AxeAnimator").GetComponent<Animator>();
         healthSlider = FindInActiveObjectByName("MobHpTop").GetComponent<Image>();
         player = GameObject.Find("Player");
     }
@@ -48,9 +48,9 @@ public class CharacterCombat : MonoBehaviour{
             attackCooldown = 2.6f / attackSpeed;
             if (OnAttack != null)
                 OnAttack();
-            if (anim != null && gameObject.name == "Player") {
-                anim.Play("Base Layer.aXe",0);
-            }            
+            //if (anim != null && gameObject.name == "Player") {
+            //    anim.Play("Base Layer.aXe",0);
+            //}            
            
         }
     }
