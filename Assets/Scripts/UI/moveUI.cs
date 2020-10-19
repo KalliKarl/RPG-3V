@@ -16,6 +16,6 @@ public class moveUI : MonoBehaviour
     }
 
     public void MoveUI() {
-        this.transform.position = new Vector3(Input.mousePosition.x,Input.mousePosition.y-190,0);
+        this.transform.position = new Vector3(Input.mousePosition.x +30,Input.mousePosition.y-130,0);
     }
 }

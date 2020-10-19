@@ -16,7 +16,7 @@ public class CharacterCombat : MonoBehaviour{
     private void Start() {
         myStats = GetComponent<CharacterStats>();
         //anim = GameObject.Find("AxeAnimator").GetComponent<Animator>();
-        healthSlider = FindInActiveObjectByName("MobHpTop").GetComponent<Image>();
+        healthSlider = StaticMethods.FindInActiveObjectByName("MobHpTop").GetComponent<Image>();
         player = GameObject.Find("Player");
     }
 
@@ -70,16 +70,5 @@ public class CharacterCombat : MonoBehaviour{
             healthSlider.fillAmount = healthPercent;
             }
         FindObjectOfType<AudioManager>().Play("hit"+rand);
-    }
-    GameObject FindInActiveObjectByName(string name) {
-        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
-        for (int i = 0; i < objs.Length; i++) {
-            if (objs[i].hideFlags == HideFlags.None) {
-                if (objs[i].name == name) {
-                    return objs[i].gameObject;
-                }
-            }
-        }
-        return null;
     }
 }

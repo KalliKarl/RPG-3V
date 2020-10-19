@@ -11,14 +11,6 @@ public class InventorySlot : MonoBehaviour
     public int stack= 1;
     Item item;
 
-    public void SetStack(int a) {
-
-        stack = a;
-    }
-    public int GetStack() {
-
-        return stack;
-    }
     public  void AddItem(Item newItem) {
 
         item = newItem;
@@ -32,6 +24,8 @@ public class InventorySlot : MonoBehaviour
         removeButton.interactable = true;
         //activeButton.interactable = true;
 
+        StaticMethods.refreshStack();
+
 
     }
     public void ClearSlot() {
@@ -42,11 +36,14 @@ public class InventorySlot : MonoBehaviour
         removeButton.interactable = false;
         //activeButton.interactable = false;
 
+        StaticMethods.refreshStack();
     }
 
     public void OnRemoveButton() {
         
         Inventory.instance.Remove(item);
+
+        StaticMethods.refreshStack();
     }
 
     public void UseItem() {

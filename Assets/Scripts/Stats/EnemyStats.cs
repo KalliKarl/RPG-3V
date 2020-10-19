@@ -14,7 +14,8 @@ public class EnemyStats : CharacterStats
     public GameObject lvlParti;
 
     private void Start() {
-        itemsParent = FindInActiveObjectByName("ItemsParent");
+
+        itemsParent = StaticMethods.FindInActiveObjectByName("ItemsParent");
     }
 
     public override void Die() {
@@ -86,21 +87,6 @@ public class EnemyStats : CharacterStats
         spawner.GetComponent<spawner>().startCorotine();
         
         #endregion
-    }
-    GameObject FindInActiveObjectByName(string name)
-    {
-        Transform[] objs = Resources.FindObjectsOfTypeAll<Transform>() as Transform[];
-        for (int i = 0; i < objs.Length; i++)
-        {
-            if (objs[i].hideFlags == HideFlags.None)
-            {
-                if (objs[i].name == name)
-                {
-                    return objs[i].gameObject;
-                }
-            }
-        }
-        return null;
     }
 
 }

@@ -20,7 +20,7 @@ public class Inventory : MonoBehaviour{
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallBack;
     public int space = 20;
-    
+    public int gold;
 
     public List<Item> items = new List<Item>();
     public bool Add(Item item)
@@ -38,6 +38,8 @@ public class Inventory : MonoBehaviour{
                     items.Add(item);
                     if (onItemChangedCallBack != null)
                         onItemChangedCallBack.Invoke();
+
+                    StaticMethods.refreshStack();
                 }
             }
             
@@ -52,5 +54,8 @@ public class Inventory : MonoBehaviour{
         items.Remove(item);
         if (onItemChangedCallBack != null)
             onItemChangedCallBack.Invoke();
+
+
+        StaticMethods.refreshStack();
     }
 }
