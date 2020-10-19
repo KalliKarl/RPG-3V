@@ -25,7 +25,7 @@ public class PlayerMotor : MonoBehaviour
             float distonse = Vector3.Distance(agent.transform.position, point2);
             if (distonse < 1) {
 
-                Debug.Log("STOP" + distonse);
+                //Debug.Log("STOP" + distonse);
                 gameObject.GetComponent<NavMeshAgent>().isStopped = true;
                 point2 = Vector3.zero;
 

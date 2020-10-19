@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Cache;
+using UnityEngine.Diagnostics;
 
 public class PlayerControl : MonoBehaviour {
     public Interactable focus;
-    public LayerMask movementMask;
+    public LayerMask movementMask,itemMask;
     public GameObject hitPrefab;
     Camera cam;
     PlayerMotor motor;
@@ -28,30 +29,38 @@ public class PlayerControl : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100, movementMask)) {
-                motor.MoveToPoint(hit.point);
-                hitPrefab.transform.position = hit.point;
-                hitPrefab.transform.position += new Vector3(0f,0.1f,0f);
-                // Debug.Log("we hit" + hit.collider.name + hit.point);
-                // move our player to what we hit
-
-                // stop focusing any objects
-                RemoveFocus();
-                
-            }
-        }
-        if (Input.GetMouseButtonDown(1)) {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100)) {
-                
-                Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
-                if (interactable != null) {
-                    SetFocus(interactable);
-                }
-                //Check if we hit an itreccatable
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("walkable")) {
+                    motor.MoveToPoint(hit.point);
+                    hitPrefab.transform.position = hit.point;
+                    hitPrefab.transform.position += new Vector3(0f, 0.1f, 0f);
+                    Debug.DrawLine(this.transform.position, hit.point, Color.red,1f);
+                    Debug.Log("we hit movementmask" + hit.collider.name + hit.point);
+                    // move our player to what we hit
 
-                // stop focusing any objects
+                    // stop focusing any objects
+                    RemoveFocus();
+                }
+                else if(hit.transform.gameObject.layer == LayerMask.NameToLayer("itemBox")) {
+                    motor.MoveToPoint(hit.point);
+                    Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
+
+                    Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
+                    if (interactable != null) {
+                        SetFocus(interactable);
+                    }
+                    Debug.Log("we hit item mask" + hit.collider.name + hit.point);
+                }
+                else {
+                    motor.MoveToPoint(hit.point);
+                    Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
+
+                    Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
+                    if (interactable != null) {
+                        SetFocus(interactable);
+                    }
+                    Debug.Log("we hit others " + hit.collider.name + hit.point);
+                }
             }
         }
     }
