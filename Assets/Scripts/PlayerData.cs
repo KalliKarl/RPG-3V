@@ -6,16 +6,13 @@ using UnityEngine;
 public class PlayerData 
 {
 
-    public int level;
-    public int skillPoint;
-    public int Experience;
+    public int level, skillPoint, Experience,gold;
     public float[] position;
-    public string[] items;
-    public string[] equips;
+    public string[] items, equips;
     public PlayerData(Player player) {
         //GameObject manager = GameObject.Find("GameManager");
         //item = manager.GetComponent<Inventory>().items;
-
+        gold = player.gold;
         level = player.level;
         skillPoint = player.skillPoint;
         Experience = player.experience;

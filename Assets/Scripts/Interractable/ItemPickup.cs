@@ -46,7 +46,14 @@ public class ItemPickup : Interactable {
 			}
         }
         else {
-			Inventory.instance.Add(item);   // Add to inventory
+			if(item.name == "gold") {
+				GameObject.Find("Player").GetComponent<Player>().gold += this.GetComponent<goldCoin>().goldAmount;
+				StaticMethods.FindInActiveObjectByName("txtGold").GetComponent<Text>().text = GameObject.Find("Player").GetComponent<Player>().gold.ToString();
+			}
+            else {
+				Inventory.instance.Add(item);   // Add to inventory
+			}
+			
 		}
 
         

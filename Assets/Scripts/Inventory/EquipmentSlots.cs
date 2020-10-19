@@ -31,7 +31,7 @@ public class EquipmentSlots : MonoBehaviour
         info = menu.GetComponentsInChildren<Text>();
 
         info[0].text = "Name :" +item.name.ToString();
-        info[1].text = "Type :" +item.name.ToString();
+        info[1].text = "Type :" + item.equipSlot.ToString();
         info[2].text = "Level :" +item.level.ToString();
         info[3].text = "Degree :" + item.degree.ToString();
         info[4].text = "Armor " + item.armorModifier.ToString();

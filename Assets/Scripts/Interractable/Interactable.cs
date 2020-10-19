@@ -16,6 +16,7 @@ public class Interactable : MonoBehaviour {
             if (!hasInteracted && distance <= radius) {
                 hasInteracted = true;
                 Interact();
+                Debug.Log("has interact with " + interactionTransform.name);
             }
         }
     }

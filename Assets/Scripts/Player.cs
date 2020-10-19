@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
+
 public class Player : MonoBehaviour{
     
-    public int level;
-    public int skillPoint;
-    public int experience;
-    public string[] items;
-    public string[] equips;
+    public int level, experience, skillPoint,gold;
+    public string[] items, equips;
 
     GameObject gameManager;
     Inventory playerInventory;
@@ -21,6 +20,8 @@ public class Player : MonoBehaviour{
     public object currentEquip { get; internal set; }
 
     public void Start() {
+        GameObject goldTxt = StaticMethods.FindInActiveObjectByName("txtGold");
+        goldTxt.GetComponent<Text>().text = gold.ToString();
     }
 
     public void SavePlayer() {
@@ -54,6 +55,7 @@ public class Player : MonoBehaviour{
         level = data.level;
         skillPoint = data.skillPoint;
         experience = data.Experience;
+        gold = data.gold;
 
         for (int i =0; i<itManager.items.Count;i++) {
             for(int j = 0; j < data.items.Length ;j++) {
@@ -84,7 +86,10 @@ public class Player : MonoBehaviour{
 
 
         GameObject itemManager = GameObject.Find("itemManager");
-        
+
+        GameObject goldTxt = StaticMethods.FindInActiveObjectByName("txtGold");
+        goldTxt.GetComponent<Text>().text = gold.ToString();
+
         Vector3 position;
         position.x = data.position[0];
         position.y = data.position[1];

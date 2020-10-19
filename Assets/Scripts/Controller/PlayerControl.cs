@@ -29,6 +29,8 @@ public class PlayerControl : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+
+
             if (Physics.Raycast(ray, out hit, 100)) {
                 if (hit.transform.gameObject.layer == LayerMask.NameToLayer("walkable")) {
                     motor.MoveToPoint(hit.point);
