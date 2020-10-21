@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Cache;
 using UnityEngine.Diagnostics;
+using System.Collections.Generic;
 
 public class PlayerControl : MonoBehaviour {
     public Interactable focus;
@@ -12,7 +13,8 @@ public class PlayerControl : MonoBehaviour {
     PlayerMotor motor;
     GameObject mobUI;
     Image healthSlider;
-
+    int indx;
+    public List<Transform> transforms = new List<Transform>();
     void Start() {
         cam = Camera.main;
         motor = GetComponent<PlayerMotor>();
@@ -21,7 +23,31 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void Update() {
-        
+        if (Input.GetKeyDown(KeyCode.G) && transforms.Count >0) {
+            
+            transforms.RemoveAll(Transform => Transform == null);
+            float distanceF =0f ,distanceL = 0f;
+            for(int i = 0; i < transforms.Count;i ++) {
+                distanceF = Vector3.Distance(this.transform.position,transforms[i].position);
+                if (distanceL == 0)
+                    distanceL = distanceF ;
+                if (distanceF < distanceL) {
+                    distanceL = distanceF;
+                    indx = i;
+                }
+            }
+            if(transforms[indx] != null) {
+                motor.MoveToPoint(transforms[indx].transform.position);
+                Interactable interactable = transforms[indx].gameObject.GetComponentInParent<Interactable>();
+                if (interactable != null) {
+                    SetFocus(interactable);
+                }
+            }
+
+            
+            transforms.RemoveAll(Transform => Transform == null);
+            indx = 0;
+        }
 
         if (EventSystem.current.IsPointerOverGameObject())
             return;
@@ -54,7 +80,9 @@ public class PlayerControl : MonoBehaviour {
                     Debug.Log("we hit item mask" + hit.collider.name + hit.point);
                 }
                 else {
-                    motor.MoveToPoint(hit.point);
+                    if (hit.transform.name != "Player")
+                       motor.MoveToPoint(hit.point);  
+                   
                     Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
 
                     Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
@@ -63,6 +91,8 @@ public class PlayerControl : MonoBehaviour {
                     }
                     Debug.Log("we hit others " + hit.collider.name + hit.point);
                 }
+                transforms.RemoveAll(Transform => Transform == null);
+
             }
         }
     }
@@ -111,4 +141,14 @@ public class PlayerControl : MonoBehaviour {
         focus = null;
         motor.StopFollowingTarget();
     }
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.layer == 10)
+            transforms.Add(other.transform);
+
+    }
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("itemBox"))
+            transforms.Remove(other.transform);
+    }
+
 }

@@ -29,11 +29,11 @@ public class Inventory : MonoBehaviour{
             // Debug.Log("OK Not Default Item  its ");
             if (true) {
                 if (items.Count >= space) {
-                    Debug.Log("ERROR ! Not enough room.");
+                    //Debug.Log("ERROR ! Not enough room.");
                     return false;
                 }
                 else {
-                    Debug.Log("OK item Added = " + item);
+                    //Debug.Log("OK item Added = " + item);
                     items.Add(item);
                     if (onItemChangedCallBack != null)
                         onItemChangedCallBack.Invoke();
@@ -43,7 +43,7 @@ public class Inventory : MonoBehaviour{
             }
             
         }
-        Debug.Log("Default ITEM!!");
+        //Debug.Log("Default ITEM!!");
         return true;
     }
 

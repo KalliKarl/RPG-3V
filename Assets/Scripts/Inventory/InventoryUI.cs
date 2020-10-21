@@ -15,7 +15,6 @@ public class InventoryUI : MonoBehaviour
     {
         inventory = Inventory.instance;
         inventory.onItemChangedCallBack += UpdateUI;
-
         slots = itemParents.GetComponentsInChildren<InventorySlot>();
 
     }
@@ -26,6 +25,7 @@ public class InventoryUI : MonoBehaviour
         if (Input.GetButtonDown("Inventory")){
 
             inventoryUI.SetActive(!inventoryUI.activeSelf);
+            inventoryUI.GetComponent<RectTransform>().anchoredPosition = Vector3.zero; 
 
         }
         

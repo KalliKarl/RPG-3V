@@ -20,7 +20,7 @@ public class ItemPickup : Interactable {
 	// Pick up the item
 	void PickUp() {
         #region LogPrint
-        Debug.Log("Picking up " + item.name);
+        //Debug.Log("Picking up " + item.name);
 		GameObject logContent = GameObject.Find("logContent");
 		Color renk = new Color();
 		renk = Color.red;	
