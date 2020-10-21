@@ -33,8 +33,8 @@ public class EnemyStats : CharacterStats
 
 
         #region Level UP
-        int check = player.GetComponent<Player>().experience;
-        int lvl = check / 100;
+        float check = player.GetComponent<Player>().experience;
+        int lvl = (int)(check / 100f);
         lvl++;
 
         // if level up
@@ -56,6 +56,12 @@ public class EnemyStats : CharacterStats
         stats.GetComponent<HpMpStatsUI>().Level.text = "Level : " + lvl.ToString();
         stats.GetComponent<HpMpStatsUI>().Exp.text = "Expereince : " + check.ToString();
         stats.GetComponent<HpMpStatsUI>().Sp.text = "SkillPoint : " + player.GetComponent<Player>().skillPoint.ToString();
+        float expPercent = check / 100 * lvl;
+        float expPercentTxt = expPercent * 100*lvl;
+        if (expPercentTxt > 100)
+            expPercentTxt = expPercentTxt / (100 * lvl);
+        GameObject.Find("ExpPercent").GetComponent<Text>().text = expPercentTxt.ToString().Substring(0,4) +" %";
+        GameObject.Find("ExpBar").GetComponent<Image>().fillAmount = expPercent;
         #endregion
 
         #region Item Drop

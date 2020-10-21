@@ -17,14 +17,14 @@ public class EquipmentSlots : MonoBehaviour
        
     }
 
-    public void Unequipment() {
+    public void Unequipment() { // unequipall delete
 
         item = null;
         icon.sprite = null;
         icon.enabled = false;
     }
    
-
+    //Equipment İnfos
     public void OnMouseEnter() {
         if(item != null) {
             menu.SetActive(true);// Menu Active
