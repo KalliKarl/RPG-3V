@@ -18,12 +18,20 @@ MonoBehaviour:
   stackable: 0
   stack: 1
   price: 100
+  itemsParent: {fileID: 0}
   equipSlot: 1
+  wepType: 0
+  armorType: 0
+  gender: 0
   armorModifier: 2
   damageModifier: 0
   level: 1
   degree: 1
   critical: 0
   durability: 46
-  block: 0
+  block: 10
+  strBuff: 0
+  intBuff: 0
+  durBuff: 0
+  plus: 0
   range: 0
