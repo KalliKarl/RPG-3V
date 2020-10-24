@@ -4,16 +4,19 @@ using UnityEngine.UI;
 using System.Net.Cache;
 using UnityEngine.Diagnostics;
 using System.Collections.Generic;
+using Cinemachine;
 
 public class PlayerControl : MonoBehaviour {
     public Interactable focus;
     public LayerMask movementMask,itemMask;
-    public GameObject hitPrefab;
+    public GameObject hitPrefab, arrow,posBow,CM_Cam;
+    public float fov,minT,maxT,tMultp;
     Camera cam;
     PlayerMotor motor;
     GameObject mobUI;
     Image healthSlider;
     int indx;
+    public float thrust;
     public List<Transform> transforms = new List<Transform>();
     void Start() {
         cam = Camera.main;
@@ -23,7 +26,41 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.G) && transforms.Count >0) {
+        if (Input.GetKey(KeyCode.E)) { // Hold E BOW
+            maxT = 5000;
+            minT = 500;
+            if (thrust < maxT)
+                thrust += tMultp;
+            fov = 45 - ((thrust - minT) / (maxT - minT)) * 10;
+            CM_Cam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = Mathf.Lerp(CM_Cam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView, fov,Time.deltaTime *10);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, cam.transform.rotation, Time.deltaTime * 5);
+        }
+        if (Input.GetKeyUp(KeyCode.E)) { // When Relase BOW Button
+
+            CM_Cam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView = 45;
+            fov = (int)CM_Cam.GetComponent<CinemachineFreeLook>().m_Lens.FieldOfView;
+            Vector3 playerPos = this.transform.position;
+            Quaternion playerRot = this.transform.rotation;
+            Vector3 shootingPos = posBow.transform.position;
+            Quaternion cmRot = cam.transform.rotation;
+
+
+
+            if (thrust > 5000)
+                thrust = 5000;
+            arrow.GetComponent<shotArrow>().thrust = thrust;
+            Debug.Log(thrust);
+            Instantiate(arrow, shootingPos, cmRot);
+            //Instantiate(arrow, shootingPos + new Vector3(0, .5f, 0),  cmRot);
+            //Instantiate(arrow, shootingPos + new Vector3(0, -.5f, 0), cmRot);
+            //Instantiate(arrow, shootingPos + new Vector3(.5f, 0, 0),  cmRot);
+            //Instantiate(arrow, shootingPos + new Vector3(-.5f, 0, 0), cmRot);
+
+            thrust = 500;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.G) && transforms.Count >0) { // Grab item nearest item to player from list
             
             transforms.RemoveAll(Transform => Transform == null);
             float distanceF =0f ,distanceL = 0f;
@@ -36,8 +73,10 @@ public class PlayerControl : MonoBehaviour {
                     indx = i;
                 }
             }
-            if(transforms[indx] != null) {
+            if(transforms.Count > 0 && transforms[indx] != null) {
                 motor.MoveToPoint(transforms[indx].transform.position);
+                hitPrefab.transform.position = transforms[indx].transform.position;
+                hitPrefab.transform.position += new Vector3(0f, 0.05f, 0f);
                 Interactable interactable = transforms[indx].gameObject.GetComponentInParent<Interactable>();
                 if (interactable != null) {
                     SetFocus(interactable);
@@ -95,6 +134,8 @@ public class PlayerControl : MonoBehaviour {
 
             }
         }
+        
+        
     }
     void SetFocus(Interactable newFocus) {
         if (newFocus != focus) {
@@ -142,7 +183,7 @@ public class PlayerControl : MonoBehaviour {
         motor.StopFollowingTarget();
     }
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.layer == 10)
+        if (other.gameObject.layer == 12)
             transforms.Add(other.transform);
 
     }

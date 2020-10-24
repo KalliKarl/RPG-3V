@@ -4,12 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Shootable
   - EnemyLvl1
   - EnemyLvl5
-  - EnemyLvl2
   - EnemyLvl3
-  - EnemyLvl4
   - EnemyLvl6
+  - EnemyLvl4
+  - EnemyLvl2
   layers:
   - Default
   - TransparentFX
@@ -19,11 +20,11 @@ TagManager:
   - UI
   - 
   - 
+  - Lighting
   - walkable
-  - PostProcessing
-  - ItemBox
-  - Player
-  - 
+  - Postprocessing
+  - enemy
+  - itemBox
   - 
   - 
   - 
@@ -44,6 +45,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fire
+    uniqueID: 3804908061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

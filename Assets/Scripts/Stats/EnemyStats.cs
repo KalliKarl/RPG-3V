@@ -60,7 +60,7 @@ public class EnemyStats : CharacterStats
         float expPercentTxt = expPercent * 100*lvl;
         if (expPercentTxt > 100)
             expPercentTxt = expPercentTxt / (100 * lvl);
-        GameObject.Find("ExpPercent").GetComponent<Text>().text = expPercentTxt.ToString().Substring(0,4) +" %";
+        GameObject.Find("ExpPercent").GetComponent<Text>().text = expPercentTxt.ToString() +" %";
         GameObject.Find("ExpBar").GetComponent<Image>().fillAmount = expPercent;
         #endregion
 
@@ -85,13 +85,17 @@ public class EnemyStats : CharacterStats
         GameObject.Find("MobUI").SetActive(false);
 
         #region Spawner Reset
-        string _deadMob = gameObject.transform.tag;
-        GameObject spawner = GameObject.Find("Spawner1Lvl");
-        spawner.GetComponent<spawner>().stop = false;
-        int _iDeadMob = System.Array.IndexOf(Enemies.enemyList, _deadMob);
-        spawner.GetComponent<spawner>().enemyCount[_iDeadMob] -=1;
-        spawner.GetComponent<spawner>().startCorotine();
-        
+        int indexLvl = gameObject.GetComponent<EnemyStats>().Level;
+        indexLvl--;
+        GameObject.Find("SpawnerManager").GetComponent<SpawnerManager>().spawnerList[indexLvl].gameObject.GetComponent<spawner>().amount -=1;
+
+        //string _deadMob = gameObject.transform.tag;
+        //GameObject spawner = GameObject.Find("Spawner1Lvl");
+        //spawner.GetComponent<spawner>().stop = false;
+        //int _iDeadMob = System.Array.IndexOf(Enemies.enemyList, _deadMob);
+        ////spawner.GetComponent<spawner>().enemyCount[_iDeadMob] -=1;
+        ////spawner.GetComponent<spawner>().startCorotine();
+
         #endregion
     }
 

@@ -6,26 +6,14 @@ using UnityEngine;
 public class spawner : MonoBehaviour
 {
     public GameObject[] enemies,spots;  
-    public Vector3 spawnValues;
+    private Vector3 spawnValues;
     public float spawnWait,range;
-    public int startWait,summaryEnemy,maxLimit,limit; 
-    private int randEnemy,count;
+    public int startWait, mobIndex,limit,amount; 
     public bool stop,spot;
-    public List<string> enemie = new List<string>();
-    public List<int> enemyCount = new List<int>();
-    void Start()
-    {
+    void Start(){
         StartCoroutine(waitSpawner());
         spawnValues = this.transform.position;
-        int j = 0;
-        for (int i = 0; i < Enemies.enemyList.Length; i++) {
-            
-            GameObject[] arrayGo = GameObject.FindGameObjectsWithTag(Enemies.enemyList[i]);
-            count = GameObject.FindGameObjectsWithTag(Enemies.enemyList[i]).Length;
-            enemie.Add(enemies[j].name);
-            enemyCount.Add(0);
-            j++;
-        }
+     
     }
     public void startCorotine() {
         StartCoroutine(waitSpawner());
@@ -35,8 +23,8 @@ public class spawner : MonoBehaviour
 
         while (!stop) {
 
-            randEnemy = (int)Random.Range(0, enemies.Length);
             int randSpot = Random.Range(0,8);
+
             if (spot) {
                 spawnValues = spots[randSpot].transform.position;
             }
@@ -45,16 +33,12 @@ public class spawner : MonoBehaviour
                 spawnValues = new Vector3(Random.Range(transform.position.x + range, transform.position.x - range), transform.position.y, Random.Range(transform.position.z + range, transform.position.z - range));
 
             }
-            maxLimit = limit * enemies.Length;
-            summaryEnemy = enemyCount.Sum();
 
-            if (enemyCount[randEnemy] < limit) {
-                enemyCount[randEnemy] += 1;
-                //Debug.Log("Spawned :" + enemie[randEnemy] + "\t Count :" + enemyCount[randEnemy]);
-                GameObject enemyAI = Instantiate(enemies[randEnemy], spawnValues, gameObject.transform.rotation) as GameObject;
-            }
 
-            if (maxLimit == summaryEnemy)
+            GameObject enemyAI = Instantiate(enemies[mobIndex], spawnValues, gameObject.transform.rotation) as GameObject;
+            if (enemyAI != null)
+                amount++;
+            if (amount >= limit)
                 stop = true;
             yield return new WaitForSeconds(spawnWait);
         } 
