@@ -8,8 +8,6 @@ public class Interactable : MonoBehaviour {
     bool isFocus = false;
     Transform player,focus,newFocus;
     bool hasInteracted = false;
-    private void Start() {
-    }
     void Update() {
         if (isFocus && hasInteracted == false) { 
             float distance = Vector3.Distance(player.position, interactionTransform.position);

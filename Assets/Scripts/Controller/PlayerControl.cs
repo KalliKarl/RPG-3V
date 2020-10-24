@@ -51,10 +51,10 @@ public class PlayerControl : MonoBehaviour {
             arrow.GetComponent<shotArrow>().thrust = thrust;
             Debug.Log(thrust);
             Instantiate(arrow, shootingPos, cmRot);
-            //Instantiate(arrow, shootingPos + new Vector3(0, .5f, 0),  cmRot);
-            //Instantiate(arrow, shootingPos + new Vector3(0, -.5f, 0), cmRot);
-            //Instantiate(arrow, shootingPos + new Vector3(.5f, 0, 0),  cmRot);
-            //Instantiate(arrow, shootingPos + new Vector3(-.5f, 0, 0), cmRot);
+            Instantiate(arrow, shootingPos + new Vector3(0, .5f, 0),  cmRot);
+            Instantiate(arrow, shootingPos + new Vector3(0, -.5f, 0), cmRot);
+            Instantiate(arrow, shootingPos + new Vector3(.5f, 0, 0),  cmRot);
+            Instantiate(arrow, shootingPos + new Vector3(-.5f, 0, 0), cmRot);
 
             thrust = 500;
         }
@@ -137,12 +137,12 @@ public class PlayerControl : MonoBehaviour {
         
         
     }
-    void SetFocus(Interactable newFocus) {
+    public void SetFocus(Interactable newFocus) {
         if (newFocus != focus) {
             if (focus != null)
                 focus.OnDefocused();
             focus = newFocus;
-            motor.FollowTarget(newFocus);
+            //motor.FollowTarget(newFocus);
             string foc = newFocus.name.ToString();
             foc = foc.Substring(0, 7);
             if(foc != "itemBox" && foc !="NPCNPCN") {
@@ -175,7 +175,7 @@ public class PlayerControl : MonoBehaviour {
         newFocus.OnFocused(transform);
 
     }
-    void RemoveFocus() {
+    public void RemoveFocus() {
         if (focus != null)
             focus.OnDefocused();
         mobUI.SetActive(false);

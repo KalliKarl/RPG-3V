@@ -29,10 +29,16 @@ public class shotArrow : MonoBehaviour
         if(other.name != "Player") {
             rb.constraints = RigidbodyConstraints.FreezeAll;
             if (!explosion) {
-                Instantiate(Boom, this.transform.position,this.transform.rotation);
+                GameObject patladi =Instantiate(Boom, this.transform.position,this.transform.rotation);
+                Destroy(patladi,30);
                 explosion = true;
             }
-                
+           
+            Interactable interactable = other.GetComponentInParent<Interactable>();
+            if (interactable != null) {
+                GameObject.Find("Player").GetComponent<PlayerControl>().SetFocus(interactable);
+                other.GetComponentInParent<Enemy>().Interact();
+            }
             rb.velocity = Vector3.zero;
             this.GetComponent<BoxCollider>().enabled = false;
             Debug.Log("Arrow Hit : " + other.name);
