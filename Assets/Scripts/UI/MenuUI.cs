@@ -8,6 +8,7 @@ public class MenuUI : MonoBehaviour
     Bloom bloomLayer = null;
     MotionBlur motionBlur = null;
     public float bloom = 10f;
+    public int controlType;
  
     void Start()
     {
@@ -145,6 +146,17 @@ public class MenuUI : MonoBehaviour
         
     
     
+    }
+
+    public void SetContorl(int control) {
+        switch (control) {
+            case 0:
+                controlType = 0;
+                break;
+            case 1:
+                controlType = 1;
+                break;
+        }
     }
     public void QuitGame() {
 

@@ -17,6 +17,7 @@ public class spawner : MonoBehaviour
     }
     public void startCorotine() {
         StartCoroutine(waitSpawner());
+        stop = false;
     }
     IEnumerator waitSpawner() {
         yield return new WaitForSeconds(startWait);
@@ -36,6 +37,7 @@ public class spawner : MonoBehaviour
 
 
             GameObject enemyAI = Instantiate(enemies[mobIndex], spawnValues, gameObject.transform.rotation) as GameObject;
+            enemyAI.transform.parent = this.transform;
             if (enemyAI != null)
                 amount++;
             if (amount >= limit)
@@ -49,7 +51,8 @@ public class spawner : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, range);
     }
     private void OnTriggerEnter(Collider other) {
-        Debug.Log(other.name);
+        //Debug.Log(other.name);
+
         Destroy(this.gameObject.GetComponent<Rigidbody>()); 
 
 

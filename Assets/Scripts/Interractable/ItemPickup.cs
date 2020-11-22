@@ -10,8 +10,8 @@ public class ItemPickup : Interactable {
 	InventorySlot[] slots;
 	public GameObject itemsParent;
 	bool found;
-	public override void Interact() {
-		base.Interact();
+	public override void Interact(int a) {
+		base.Interact(0);
 
 		itemsParent = StaticMethods.FindInActiveObjectByName("ItemsParent");
 		PickUp();

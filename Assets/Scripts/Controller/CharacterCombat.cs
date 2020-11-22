@@ -40,12 +40,12 @@ public class CharacterCombat : MonoBehaviour{
 
         }
     }
-    public void Attack(CharacterStats targetStats) {
+    public void Attack(CharacterStats targetStats,int a) {
         //Debug.Log(attackCooldown);
         if(attackCooldown <= 0) {
-            StartCoroutine(DoDamage(targetStats,attackDelay));
+            StartCoroutine(DoDamage(targetStats,attackDelay,a));
            // targetStats.TakeDamage(myStats.damage.GetValue());
-            attackCooldown = 2.6f / attackSpeed;
+            attackCooldown = .6f / attackSpeed;
             if (OnAttack != null)
                 OnAttack();
             //if (anim != null && gameObject.name == "Player") {
@@ -55,10 +55,10 @@ public class CharacterCombat : MonoBehaviour{
         }
     }
 
-    IEnumerator DoDamage (CharacterStats stats , float delay) {
+    IEnumerator DoDamage (CharacterStats stats , float delay,int a) {
         yield return new WaitForSeconds(delay);
         int _cDamage = myStats.damage.GetValue();
-        stats.TakeDamage(_cDamage);
+        stats.TakeDamage(_cDamage,a);
         int rand = (int)Random.Range(0f, 5f);
         //Debug.Log(rand +"DoDamage" + myStats.damage.GetValue());
         

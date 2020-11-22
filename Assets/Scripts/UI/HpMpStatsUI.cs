@@ -3,7 +3,8 @@ using UnityEngine.UI;
 public class HpMpStatsUI : MonoBehaviour
 {
     public GameObject player;
-    public int level, exp, sp;
+    public int level;
+    public float exp, sp;
     public Image healthSlider;
     public Text CurHp, MaxHp, Level , Exp , Sp;
     // Start is called before the first frame update

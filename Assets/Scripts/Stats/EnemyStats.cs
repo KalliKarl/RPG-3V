@@ -2,67 +2,41 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class EnemyStats : CharacterStats
 {
-    public GameObject prefab,Kasa,itemsParent;
+    public GameObject Kasa,itemsParent,lvlParti;
     public string mobName;
     itemManager itManager;
-    public int Exp, Sp, Level;
+    public float Exp, Sp;
+    public int Level;
     [HideInInspector]
     public int ratio,ratio1,rand;
-    public GameObject lvlParti;
 
     private void Start() {
 
         itemsParent = StaticMethods.FindInActiveObjectByName("ItemsParent");
+        Exp = this.GetComponent<enemyInfos>().expMob[Level - 1];
+        mobName = this.GetComponent<enemyInfos>().names[Level - 1];
+        armor.baseValue = this.GetComponent<enemyInfos>().deffance[Level - 1];
+        damage.baseValue = this.GetComponent<enemyInfos>().damage[Level - 1];
+        maxHealth = this.GetComponent<enemyInfos>().maxHealth[Level - 1];
     }
 
     public override void Die() {
         base.Die();
-
-        // Add ragdoll effect  / death animation       
         GameObject player = GameObject.Find("Player");
-        player.GetComponent<Player>().experience += Exp;
-        player.GetComponent<Player>().skillPoint  += Sp;
+        player.GetComponent<Player>().AddExperience(Exp);
+        player.GetComponent<Player>().AddSkillPoint(Sp);
+
         GameObject logViewer = GameObject.Find("logContent");
         Color renk = Color.green;
         Color renk2 = Color.yellow;
         logViewer.GetComponent<logViewer>().entryLog(Exp + "\t Experience gained.",renk);
         logViewer.GetComponent<logViewer>().entryLog(Sp + "\t Skill Point gained.",renk2);
 
-
-        #region Level UP
-        float check = player.GetComponent<Player>().experience;
-        int lvl = (int)(check / 100f);
-        lvl++;
-
-        // if level up
-        if (player.GetComponent<Player>().level != lvl) {
-            player.GetComponent<Player>().level = lvl;
-            player.GetComponent<PlayerStats>().maxHealth += 14 ;
-            player.GetComponent<PlayerStats>().maxMana += 14;
-            player.GetComponent<PlayerStats>().Healthmodifer(player.GetComponent<PlayerStats>().maxHealth);
-            GameObject.Find("HpBarRight").GetComponent<Image>().fillAmount = 1;
-            GameObject _stats = GameObject.Find("Stats");
-            _stats.GetComponent<HpMpStatsUI>().MaxHp.text = player.GetComponent<PlayerStats>().maxHealth.ToString();
-            _stats.GetComponent<HpMpStatsUI>().CurHp.text = player.GetComponent<PlayerStats>().currentHealth.ToString();
-            Instantiate(lvlParti,new Vector3(transform.position.x,transform.position.y + 1,transform.position.z), Quaternion.Euler(-90,0,0) ,player.transform);
-        }
-        #endregion
-
-        #region Update UI
-        GameObject stats = GameObject.Find("Stats");
-        stats.GetComponent<HpMpStatsUI>().Level.text = "Level : " + lvl.ToString();
-        stats.GetComponent<HpMpStatsUI>().Exp.text = "Expereince : " + check.ToString();
-        stats.GetComponent<HpMpStatsUI>().Sp.text = "SkillPoint : " + player.GetComponent<Player>().skillPoint.ToString();
-        float expPercent = check / 100 * lvl;
-        float expPercentTxt = expPercent * 100*lvl;
-        if (expPercentTxt > 100)
-            expPercentTxt = expPercentTxt / (100 * lvl);
-        GameObject.Find("ExpPercent").GetComponent<Text>().text = expPercentTxt.ToString() +" %";
-        GameObject.Find("ExpBar").GetComponent<Image>().fillAmount = expPercent;
-        #endregion
+        
 
         #region Item Drop
         Transform trans = this.transform;
@@ -77,6 +51,7 @@ public class EnemyStats : CharacterStats
             GameObject itemKasa = Instantiate(Kasa, trans.transform.position,Quaternion.identity) as GameObject;
             itemKasa.GetComponent<ItemPickup>().item = itManager.items[rand];
             itemKasa.GetComponent<ItemPickup>().itemsParent = itemsParent;
+            Destroy(itemKasa, 60);
         }
         #endregion
 
@@ -88,13 +63,7 @@ public class EnemyStats : CharacterStats
         int indexLvl = gameObject.GetComponent<EnemyStats>().Level;
         indexLvl--;
         GameObject.Find("SpawnerManager").GetComponent<SpawnerManager>().spawnerList[indexLvl].gameObject.GetComponent<spawner>().amount -=1;
-
-        //string _deadMob = gameObject.transform.tag;
-        //GameObject spawner = GameObject.Find("Spawner1Lvl");
-        //spawner.GetComponent<spawner>().stop = false;
-        //int _iDeadMob = System.Array.IndexOf(Enemies.enemyList, _deadMob);
-        ////spawner.GetComponent<spawner>().enemyCount[_iDeadMob] -=1;
-        ////spawner.GetComponent<spawner>().startCorotine();
+        GameObject.Find("SpawnerManager").GetComponent<SpawnerManager>().spawnerList[indexLvl].gameObject.GetComponent<spawner>().startCorotine();
 
         #endregion
     }

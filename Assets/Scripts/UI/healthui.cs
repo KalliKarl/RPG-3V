@@ -7,7 +7,7 @@ public class healthui : MonoBehaviour
 {
     public GameObject uiPrefab;
     public Transform target;
-
+    float countDown;
     Transform ui;
     Image healthSlider;
     Transform cam;
@@ -33,6 +33,7 @@ public class healthui : MonoBehaviour
             ui.gameObject.SetActive(true);
             float healthPercent = currentHealth / (float)maxHealth;
             healthSlider.fillAmount = healthPercent;
+            countDown = 15;
             if (currentHealth <= 0) {
                 Destroy(ui.gameObject);
             }
@@ -40,11 +41,18 @@ public class healthui : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
-    {
+    void LateUpdate(){
+
         if (ui != null) {
             ui.position = target.position;
             ui.forward = -cam.forward;
+        }
+
+        if(countDown > 0) {
+            countDown -= Time.deltaTime;
+        }
+        else {
+            ui.gameObject.SetActive(false);
         }
     }
 }

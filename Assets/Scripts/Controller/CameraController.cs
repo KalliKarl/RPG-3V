@@ -2,11 +2,8 @@
 using Cinemachine;
 [RequireComponent(typeof(CinemachineFreeLook))]
 
-public class CameraController : MonoBehaviour
-{
-    Vector2 move;
-    float rsh, rsv;
-    bool inpt;
+public class CameraController : MonoBehaviour{
+
     private bool _freeLookActive;
     private void Start() {
         CinemachineCore.GetInputAxis = GetInputAxis;
@@ -15,29 +12,6 @@ public class CameraController : MonoBehaviour
     {
         
         _freeLookActive = Input.GetMouseButton(1); // 0 = left mouse btn or 1 = right
-
-        //if (Input.GetAxis("RSH") != 0)
-        //{
-        //    if (Input.GetAxis("RSH") >= 0.2 || Input.GetAxis("RSH") <= -0.2)
-                
-        //        rsh = Input.GetAxis("RSH");
-            
-        //    //_freeLookActive = true;
-        //    inpt = true;
-        //}
-        //if (Input.GetAxis("RSV") != 0)
-        //{
-        //    if (Input.GetAxis("RSV") >= 0.2 || Input.GetAxis("RSV") <= -0.2)
-        //        rsv = Input.GetAxis("RSV");
-
-        //   // _freeLookActive = true;
-        //    inpt = true;
-        //}
-        //if (inpt)
-        //{
-        //   // Debug.Log("X : " + rsh + "\t Y:" + rsv);
-        //    inpt = false;
-        //}
 
     }
     private float GetInputAxis(string axisName) {
@@ -58,8 +32,6 @@ public class CameraController : MonoBehaviour
             }
         }
         
-    }
-    private void Awake() {
     }
 
 

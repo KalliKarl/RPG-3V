@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     public float lookRadius = 10f;
-    Transform target;
+    Transform target,spawnPoint;
     NavMeshAgent agent;
     CharacterCombat combat;
     int walkRadius = 30;
@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
         target = PlayerManager.instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
         combat = GetComponent<CharacterCombat>();
+        spawnPoint = transform;
     }
 
     // Update is called once per frame
@@ -34,7 +35,7 @@ public class EnemyController : MonoBehaviour
             if (distance <= agent.stoppingDistance) {
                 CharacterStats targetStats = target.GetComponent<CharacterStats>();
                 if (targetStats != null) {
-                    combat.Attack(targetStats);
+                    combat.Attack(targetStats,1);
                 }
                 
                 //Attack target;
@@ -45,7 +46,7 @@ public class EnemyController : MonoBehaviour
             if(walkCoolDown <= 0) {
                 Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
 
-                randomDirection += transform.position;
+                randomDirection += spawnPoint.position;
                 NavMeshHit hit;
                 NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
                 Vector3 finalPosition = hit.position;

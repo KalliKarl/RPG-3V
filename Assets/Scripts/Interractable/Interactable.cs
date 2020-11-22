@@ -13,7 +13,7 @@ public class Interactable : MonoBehaviour {
             float distance = Vector3.Distance(player.position, interactionTransform.position);
             if (!hasInteracted && distance <= radius) {
                 hasInteracted = true;
-                Interact();
+                Interact(0);
                 Debug.Log("has interact with " + interactionTransform.name);
             }
         }
@@ -33,7 +33,7 @@ public class Interactable : MonoBehaviour {
         player = null;
         hasInteracted = false;
     }
-    public virtual void Interact() {
+    public virtual void Interact(int a) {
         // this method is meant to be overwritten
         //Debug.Log("has interract with =" + transform.name);
         
