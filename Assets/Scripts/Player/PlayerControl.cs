@@ -18,7 +18,8 @@ public class PlayerControl : MonoBehaviour {
     int indx;
     public float thrust;
     private int fingerID = -1;
-    public List<Transform> transforms = new List<Transform>();
+    public List<Transform> itemBox = new List<Transform>();
+    public List<Transform> enemy = new List<Transform>();
     void Start() {
         cam = Camera.main;
         motor = GetComponent<PlayerMotor>();
@@ -38,7 +39,7 @@ public class PlayerControl : MonoBehaviour {
         if (Input.GetKeyUp(KeyCode.E)) { // When Relase BOW Button
             shoot();
         }
-        if (Input.GetKeyDown(KeyCode.G) && transforms.Count >0) { // Grab item nearest item to player from list
+        if (Input.GetKeyDown(KeyCode.G) && itemBox.Count >0) { // Grab item nearest item to player from list
             Grab();
         }
         if (EventSystem.current.IsPointerOverGameObject())
@@ -50,44 +51,78 @@ public class PlayerControl : MonoBehaviour {
             if(!EventSystem.current.IsPointerOverGameObject(fingerID)) {
                 if (Physics.Raycast(ray, out hit, 100)) {
                     if (hit.transform.gameObject.layer == LayerMask.NameToLayer("walkable") && canvas.GetComponent<MenuUI>().controlType == 1) {
-                        motor.MoveToPoint(hit.point);
-                        hitPrefab.transform.position = hit.point;
-                        hitPrefab.transform.position += new Vector3(0f, 0.1f, 0f);
-                        Debug.DrawLine(this.transform.position, hit.point, Color.red,1f);
-                        Debug.Log("we hit movementmask" + hit.collider.name + hit.point);
-                        // move our player to what we hit
-
-                        // stop focusing any objects
-                        RemoveFocus();
+                        walk(hit);
                     }
                     else if(hit.transform.gameObject.layer == LayerMask.NameToLayer("itemBox")) {
-                        motor.MoveToPoint(hit.point);
-                        Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
-
-                        Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
-                        if (interactable != null) {
-                            SetFocus(interactable);
-                        }
-                        Debug.Log("we hit item mask" + hit.collider.name + hit.point);
+                        itemGrab(hit);
                     }
                     else {
-                        if (hit.transform.name != "Player")
-                           //motor.MoveToPoint(hit.point);  
-                   
+                        //if (hit.transform.name != "Player")
+                        //    motor.MoveToPoint(hit.point);
+
                         Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
 
                         Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
                         if (interactable != null) {
                             SetFocus(interactable);
                         }
-                        Debug.Log("we hit others " + hit.collider.name + hit.point);
+                        //Debug.Log("we hit others " + hit.collider.name + hit.point);
                     }
-                    transforms.RemoveAll(Transform => Transform == null);
+                    itemBox.RemoveAll(Transform => Transform == null);
 
                 }
             }
             
         }
+    }
+    public void attackNear() {
+        enemy.RemoveAll(Transform => Transform == null);
+        //find nearest gameobject in list
+        float distanceF = 0f, distanceL = 0f;
+        for (int i = 0; i < enemy.Count; i++) {
+            distanceF = Vector3.Distance(this.transform.position, enemy[i].position);
+            if (distanceL == 0)
+                distanceL = distanceF;
+            if (distanceF < distanceL) {
+                distanceL = distanceF;
+                indx = i;
+            }
+        }
+        //move nearest gameobject and interact
+        if (enemy.Count > 0 && enemy[indx] != null) {
+            motor.MoveToPoint(enemy[indx].transform.position);
+            hitPrefab.transform.position = enemy[indx].transform.position;
+            hitPrefab.transform.position += new Vector3(0f, 0.05f, 0f);
+            Interactable interactable = enemy[indx].gameObject.GetComponentInParent<Interactable>();
+            if (interactable != null) {
+                SetFocus(interactable);
+            }
+        }
+
+
+        itemBox.RemoveAll(Transform => Transform == null);
+        indx = 0;
+    }
+    public void itemGrab(RaycastHit hit) {
+        motor.MoveToPoint(hit.point);
+        Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
+
+        Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
+        if (interactable != null) {
+            SetFocus(interactable);
+        }
+        Debug.Log("we hit item mask" + hit.collider.name + hit.point);
+    }
+    public void walk(RaycastHit hit) {
+        motor.MoveToPoint(hit.point);
+        hitPrefab.transform.position = hit.point;
+        hitPrefab.transform.position += new Vector3(0f, 0.1f, 0f);
+        Debug.DrawLine(this.transform.position, hit.point, Color.red, 1f);
+        Debug.Log("we hit movementmask" + hit.collider.name + hit.point);
+        // move our player to what we hit
+
+        // stop focusing any objects
+        RemoveFocus();
     }
     public void  preShoot() {
         crossAim.SetActive(true);
@@ -125,10 +160,11 @@ public class PlayerControl : MonoBehaviour {
         thrust = minT;
      }
     public void Grab() {
-        transforms.RemoveAll(Transform => Transform == null);
+        itemBox.RemoveAll(Transform => Transform == null);
+        //find nearest gameobject in list
         float distanceF = 0f, distanceL = 0f;
-        for (int i = 0; i < transforms.Count; i++) {
-            distanceF = Vector3.Distance(this.transform.position, transforms[i].position);
+        for (int i = 0; i < itemBox.Count; i++) {
+            distanceF = Vector3.Distance(this.transform.position, itemBox[i].position);
             if (distanceL == 0)
                 distanceL = distanceF;
             if (distanceF < distanceL) {
@@ -136,18 +172,19 @@ public class PlayerControl : MonoBehaviour {
                 indx = i;
             }
         }
-        if (transforms.Count > 0 && transforms[indx] != null) {
-            motor.MoveToPoint(transforms[indx].transform.position);
-            hitPrefab.transform.position = transforms[indx].transform.position;
+        //move nearest gameobject and interact
+        if (itemBox.Count > 0 && itemBox[indx] != null) {
+            motor.MoveToPoint(itemBox[indx].transform.position);
+            hitPrefab.transform.position = itemBox[indx].transform.position;
             hitPrefab.transform.position += new Vector3(0f, 0.05f, 0f);
-            Interactable interactable = transforms[indx].gameObject.GetComponentInParent<Interactable>();
+            Interactable interactable = itemBox[indx].gameObject.GetComponentInParent<Interactable>();
             if (interactable != null) {
                 SetFocus(interactable);
             }
         }
 
 
-        transforms.RemoveAll(Transform => Transform == null);
+        itemBox.RemoveAll(Transform => Transform == null);
         indx = 0;
     }
     public void SetFocus(Interactable newFocus) {
@@ -197,12 +234,16 @@ public class PlayerControl : MonoBehaviour {
     }
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 12)
-            transforms.Add(other.transform);
+            itemBox.Add(other.transform);
+        if (other.gameObject.layer == 11)
+            enemy.Add(other.transform);
 
     }
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == LayerMask.NameToLayer("itemBox"))
-            transforms.Remove(other.transform);
+            itemBox.Remove(other.transform);
+        if (other.gameObject.layer == 11)
+            enemy.Remove(other.transform);
     }
     private void Awake() {
 #if !UNITY_EDITOR
